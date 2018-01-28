@@ -58,7 +58,6 @@ class Carousel {
 
   onTouchMove(ev) {
     this.carousel.onTouchMove(getX(ev))
-    console.log(this.carousel)
     this.updateDOM()
   }
 
