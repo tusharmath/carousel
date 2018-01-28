@@ -89,6 +89,8 @@ suite('CarouselModel', () => {
     c.onScroll(10)
     c.onScroll(11)
     c.onScroll(12)
+    c.onTouchStart(0)
+
     assert.deepEqual(c.layout, [
       { translateX: 0, translateY: 0, width: 100, scrollY: 12 },
       { translateX: 100, translateY: 12, width: 100, scrollY: 0 },
@@ -100,13 +102,13 @@ suite('CarouselModel', () => {
     const c = new CarouselModel({ heights: [50, 100, 10], width: 100 })
     c.onScroll(5)
 
+    c.onTouchStart(50)
     assert.deepEqual(c.layout, [
       { translateX: 0, translateY: 0, width: 100, scrollY: 5 },
       { translateX: 100, translateY: 5, width: 100, scrollY: 0 },
       { translateX: 200, translateY: 5, width: 100, scrollY: 0 }
     ])
 
-    c.onTouchStart(50)
     c.onTouchMove(10)
     c.onTouchEnd(10)
 
@@ -120,6 +122,7 @@ suite('CarouselModel', () => {
 
 
     c.onScroll(7)
+    c.onTouchStart(50)
 
     assert.deepEqual(c.layout, [
       { translateX: 0, translateY: 2, width: 100, scrollY: 5 },
@@ -127,7 +130,6 @@ suite('CarouselModel', () => {
       { translateX: 200, translateY: 7, width: 100, scrollY: 0 }
     ])
 
-    c.onTouchStart(50)
     c.onTouchMove(90)
     c.onTouchEnd(90)
 

@@ -24,13 +24,13 @@ export class CarouselModel {
   }
   onScroll(scrollY) {
     this.scrollY = scrollY
+  }
+  onTouchStart(clientX) {
+    this.startX = clientX
     this.layout = this.layout.map((pos, i) => R.merge(pos, {
       translateY: i === this.selected ? pos.translateY : this.scrollY - this.layout[i].scrollY,
       scrollY: i === this.selected ? this.scrollY : pos.scrollY
     }))
-  }
-  onTouchStart(clientX) {
-    this.startX = clientX
   }
   onTouchMove(clientX) {
     this.currentX = clientX - this.startX - this.selected * this.width
