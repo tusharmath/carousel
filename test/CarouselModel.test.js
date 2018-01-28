@@ -141,4 +141,14 @@ suite('CarouselModel', () => {
       { translateX: 200, translateY: 0, width: 100, scrollY: 0 }
     ])
   })
+
+  test('isMoving', () => {
+    const c = new CarouselModel({ heights: [50, 100, 10], width: 100 })
+    assert.ok(!c.isMoving)
+    c.onTouchStart(0)
+    assert.ok(c.isMoving)
+
+    c.onTouchEnd(0)
+    assert.ok(!c.isMoving)
+  })
 })

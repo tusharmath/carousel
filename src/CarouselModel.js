@@ -2,6 +2,7 @@ import * as R from 'ramda'
 
 export class CarouselModel {
   constructor({ heights, width }) {
+    this.isMoving = false
     this.currentX = 0
     this.currentY = 0
     this.scrollY = 0
@@ -26,6 +27,7 @@ export class CarouselModel {
     this.scrollY = scrollY
   }
   onTouchStart(clientX) {
+    this.isMoving = true
     this.startX = clientX
     this.layout = this.layout.map((pos, i) => R.merge(pos, {
       translateY: i === this.selected ? pos.translateY : this.scrollY - this.layout[i].scrollY,
@@ -36,6 +38,7 @@ export class CarouselModel {
     this.currentX = clientX - this.startX - this.selected * this.width
   }
   onTouchEnd(clientX) {
+    this.isMoving = false
     const delta = this.startX - clientX
     if (Math.abs(delta) > 30) {
       if (delta > 0) {
