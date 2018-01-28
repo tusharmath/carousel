@@ -1,0 +1,43 @@
+.container {
+  display: flex;
+  position: relative;
+  width: 300%;
+  overflow: hidden;
+  text-align: center;
+}
+
+.container .pane {
+  border: 1px solid #ddd;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-size: 4em;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.container .pane-item {
+  height: 40px;
+}
+
+.container .paneA {
+  background-color: burlywood;
+}
+
+.container .paneB {
+  background-color: rgb(197, 118, 118);
+}
+
+.container .paneC {
+  background-color: rgb(103, 89, 192);
+}
+
+body, html {
+  max-height: 200px;
+  overflow: scroll;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
