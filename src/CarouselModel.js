@@ -10,11 +10,12 @@ export class CarouselModel {
     this.startY = 0
     this.width = width
     this.count = heights.length
-    this.positions = R.times(
+    this.layout = R.times(
       i => ({
         translateX: i * width,
         translateY: 0,
-        width: width
+        width: width,
+        scrollY: 0
       }),
       heights.length
     )
@@ -23,12 +24,16 @@ export class CarouselModel {
   }
   onScroll(scrollY) {
     this.scrollY = scrollY
+    this.layout = this.layout.map((pos, i) => R.merge(pos, {
+      translateY: i === this.selected ? pos.translateY : this.scrollY - this.layout[i].scrollY,
+      scrollY: i === this.selected ? this.scrollY : pos.scrollY
+    }))
   }
   onTouchStart(clientX) {
     this.startX = clientX
   }
   onTouchMove(clientX) {
-    this.currentX = (clientX - this.startX) -this.selected * this.width
+    this.currentX = clientX - this.startX - this.selected * this.width
   }
   onTouchEnd(clientX) {
     const delta = this.startX - clientX
@@ -41,5 +46,9 @@ export class CarouselModel {
     }
     this.currentX = -this.selected * this.width
     this.containerHeight = this.heights[this.selected]
+    this.layout = this.layout.map((pos, i) => R.merge(pos, {
+      translateY: i === this.selected ? 0 : -pos.scrollY
+    }))
+    this.scrollY = this.layout[this.selected].scrollY
   }
 }

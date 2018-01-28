@@ -2,14 +2,14 @@ import * as assert from 'assert'
 import { CarouselModel } from '../src/CarouselModel'
 
 suite('CarouselModel', () => {
-  test('construct -> positions', () => {
+  test('construct -> layout', () => {
     const c = new CarouselModel({ heights: [100, 200], width: 100 })
     const expected = [
-      { translateX: 0, translateY: 0, width: 100 },
-      { translateX: 100, translateY: 0, width: 100 }
+      { translateX: 0, translateY: 0, width: 100, scrollY: 0 },
+      { translateX: 100, translateY: 0, width: 100, scrollY: 0 }
     ]
 
-    assert.deepEqual(c.positions, expected)
+    assert.deepEqual(c.layout, expected)
     assert.deepEqual(c.containerHeight, 100)
   })
 
@@ -82,5 +82,61 @@ suite('CarouselModel', () => {
     const c = new CarouselModel({ heights: [100, 200], width: 100 })
     c.onScroll(100)
     assert.equal(c.scrollY, 100)
+  })
+
+  test('onScroll -> updates layout', () => {
+    const c = new CarouselModel({ heights: [50, 100, 10], width: 100 })
+    c.onScroll(10)
+    c.onScroll(11)
+    c.onScroll(12)
+    assert.deepEqual(c.layout, [
+      { translateX: 0, translateY: 0, width: 100, scrollY: 12 },
+      { translateX: 100, translateY: 12, width: 100, scrollY: 0 },
+      { translateX: 200, translateY: 12, width: 100, scrollY: 0 }
+    ])
+  })
+
+  test('onScroll -> update translateY', () => {
+    const c = new CarouselModel({ heights: [50, 100, 10], width: 100 })
+    c.onScroll(5)
+
+    assert.deepEqual(c.layout, [
+      { translateX: 0, translateY: 0, width: 100, scrollY: 5 },
+      { translateX: 100, translateY: 5, width: 100, scrollY: 0 },
+      { translateX: 200, translateY: 5, width: 100, scrollY: 0 }
+    ])
+
+    c.onTouchStart(50)
+    c.onTouchMove(10)
+    c.onTouchEnd(10)
+
+    assert.equal(c.containerHeight, 100)
+    assert.equal(c.scrollY, 0)
+    assert.deepEqual(c.layout, [
+      { translateX: 0, translateY: -5, width: 100, scrollY: 5 },
+      { translateX: 100, translateY: 0, width: 100, scrollY: 0 },
+      { translateX: 200, translateY: 0, width: 100, scrollY: 0 }
+    ])
+
+
+    c.onScroll(7)
+
+    assert.deepEqual(c.layout, [
+      { translateX: 0, translateY: 2, width: 100, scrollY: 5 },
+      { translateX: 100, translateY: 0, width: 100, scrollY: 7 },
+      { translateX: 200, translateY: 7, width: 100, scrollY: 0 }
+    ])
+
+    c.onTouchStart(50)
+    c.onTouchMove(90)
+    c.onTouchEnd(90)
+
+    assert.equal(c.containerHeight, 50)
+    assert.equal(c.scrollY, 5)
+    assert.deepEqual(c.layout, [
+      { translateX: 0, translateY: 0, width: 100, scrollY: 5 },
+      { translateX: 100, translateY: -7, width: 100, scrollY: 7 },
+      { translateX: 200, translateY: 0, width: 100, scrollY: 0 }
+    ])
   })
 })
