@@ -4,11 +4,12 @@ export class CarouselModel {
   constructor({ heights, width }) {
     this.currentX = 0
     this.currentY = 0
+    this.scrollY = 0
+    this.selected = 0
     this.startX = 0
     this.startY = 0
     this.width = width
     this.count = heights.length
-    this.selected = 0
     this.positions = R.times(
       i => ({
         translateX: i * width,
@@ -20,7 +21,9 @@ export class CarouselModel {
     this.heights = heights
     this.containerHeight = heights[this.selected]
   }
-  onScroll(scrollY) {}
+  onScroll(scrollY) {
+    this.scrollY = scrollY
+  }
   onTouchStart(clientX) {
     this.startX = clientX
   }

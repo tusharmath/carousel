@@ -77,4 +77,10 @@ suite('CarouselModel', () => {
     assert.equal(c.currentX, 0)
     assert.equal(c.containerHeight, 100)
   })
+
+  test('onScroll -> updates scroll', () => {
+    const c = new CarouselModel({ heights: [100, 200], width: 100 })
+    c.onScroll(100)
+    assert.equal(c.scrollY, 100)
+  })
 })
