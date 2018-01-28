@@ -1,4 +1,4 @@
-import { CarouselStatus } from './CarouselStatus'
+import { CarouselModel } from './CarouselModel'
 import * as R from 'ramda'
 const Container = document.querySelector('.container')
 
@@ -20,7 +20,7 @@ class Carousel {
     this.bcr = container.getBoundingClientRect()
     this.selected = 0
     this.childCount = container.childElementCount
-    this.carousel = new CarouselStatus({
+    this.model = new CarouselModel({
       heights: Array.from(container.children).map(
         i => i.getBoundingClientRect().height
       ),
@@ -47,27 +47,28 @@ class Carousel {
   }
 
   onScroll(ev) {
-    this.carousel.onScroll(ev)
+    this.model.onScroll(ev)
     this.updateDOM()
   }
 
   onTouchStart(ev) {
-    this.carousel.onTouchStart(getX(ev))
+    this.model.onTouchStart(getX(ev))
     this.updateDOM()
   }
 
   onTouchMove(ev) {
-    this.carousel.onTouchMove(getX(ev))
+    this.model.onTouchMove(getX(ev))
     this.updateDOM()
   }
 
   onTouchEnd(ev) {
-    this.carousel.onTouchEnd(getX(ev))
+    this.model.onTouchEnd(getX(ev))
     this.updateDOM()
   }
   updateDOM() {
+    console.table(this.model.positions)
     Array.from(this.container.children).forEach((el, i) => {
-      const { translateX, translateY, width } = this.carousel.positions[i]
+      const { translateX, translateY, width } = this.model.positions[i]
       setStyle(el, {
         transform: translateXY(translateX, translateY),
         width: `${width}px`
@@ -75,8 +76,8 @@ class Carousel {
     })
 
     setStyle(this.container, {
-      height: this.carousel.containerHeight,
-      transform: translateXY(this.carousel.currentX, this.carousel.currentY)
+      height: this.model.containerHeight,
+      transform: translateXY(this.model.currentX, this.model.currentY)
     })
   }
 }

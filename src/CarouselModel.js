@@ -1,6 +1,6 @@
 import * as R from 'ramda'
 
-export class CarouselStatus {
+export class CarouselModel {
   constructor({ heights, width }) {
     this.currentX = 0
     this.currentY = 0
