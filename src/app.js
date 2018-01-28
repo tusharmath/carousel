@@ -6,7 +6,7 @@ const getX = R.compose(R.prop('clientX'), R.head, R.prop('changedTouches'))
 const getY = R.compose(R.prop('clientY'), R.head, R.prop('changedTouches'))
 const setStyle = (el, value) => {
   for (let i in value) {
-    if (el.style[i] !== value[i]) {
+    if (value.hasOwnProperty(i) && el.style[i] !== value[i]) {
       el.style[i] = value[i]
     }
   }
@@ -66,7 +66,6 @@ class Carousel {
     this.updateDOM()
   }
   updateDOM() {
-    console.table(this.model.positions)
     Array.from(this.container.children).forEach((el, i) => {
       const { translateX, translateY, width } = this.model.positions[i]
       setStyle(el, {
@@ -76,7 +75,7 @@ class Carousel {
     })
 
     setStyle(this.container, {
-      height: this.model.containerHeight,
+      height: `${this.model.containerHeight}px`,
       transform: translateXY(this.model.currentX, this.model.currentY)
     })
   }

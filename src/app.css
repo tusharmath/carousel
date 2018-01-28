@@ -4,6 +4,7 @@
   width: 300%;
   overflow: hidden;
   text-align: center;
+  will-change: transform;
 }
 
 .container .pane {
@@ -15,6 +16,7 @@
   position: absolute;
   top: 0;
   left: 0;
+  will-change: transform;
 }
 
 .container .pane-item {
