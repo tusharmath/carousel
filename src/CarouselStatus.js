@@ -1,30 +1,33 @@
 import * as R from 'ramda'
 
 export class CarouselStatus {
-  constructor(count, width) {
+  constructor({ heights, width }) {
     this.currentX = 0
     this.currentY = 0
     this.startX = 0
     this.startY = 0
     this.width = width
-    this.count = count
+    this.count = heights.length
     this.selected = 0
     this.positions = R.times(
       i => ({
         translateX: i * width,
-        translateY: 0
+        translateY: 0,
+        width: width
       }),
-      count
+      heights.length
     )
+    this.heights = heights
+    this.containerHeight = heights[this.selected]
   }
   onScroll(scrollY) {}
-  onTouchStart({ clientX }) {
+  onTouchStart(clientX) {
     this.startX = clientX
   }
-  onTouchMove({ clientX }) {
-    this.currentX = clientX - this.startX
+  onTouchMove(clientX) {
+    this.currentX = (clientX - this.startX) -this.selected * this.width
   }
-  onTouchEnd({ clientX }) {
+  onTouchEnd(clientX) {
     const delta = this.startX - clientX
     if (Math.abs(delta) > 30) {
       if (delta > 0) {
@@ -34,5 +37,6 @@ export class CarouselStatus {
       }
     }
     this.currentX = -this.selected * this.width
+    this.containerHeight = this.heights[this.selected]
   }
 }

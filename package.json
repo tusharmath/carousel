@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "mocha --require=babel-register --ui=tdd",
-    "start": "webpack-dev-server --entry=./src/app.js"
+    "start": "webpack-dev-server -d --entry=./src/app.js"
   },
   "author": "",
   "license": "ISC",
