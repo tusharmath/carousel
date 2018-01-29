@@ -37,9 +37,9 @@
 
 body, html {
   max-height: 200px;
-  overflow: scroll;
   margin: 0;
   padding: 0;
   overflow-x: hidden;
+  -webkit-overflow-scrolling: touch;
 }
 
