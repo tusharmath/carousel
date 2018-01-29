@@ -1,1 +1,269 @@
-(function(a){function b(d){if(c[d])return c[d].exports;var e=c[d]={i:d,l:!1,exports:{}};return a[d].call(e.exports,e,e.exports,b),e.l=!0,e.exports}var c={};return b.m=a,b.c=c,b.d=function(a,c,d){b.o(a,c)||Object.defineProperty(a,c,{configurable:!1,enumerable:!0,get:d})},b.n=function(a){var c=a&&a.__esModule?function(){return a['default']}:function(){return a};return b.d(c,'a',c),c},b.o=function(a,b){return Object.prototype.hasOwnProperty.call(a,b)},b.p='',b(b.s=0)})([function(a,b,c){'use strict';Object.defineProperty(b,'__esModule',{value:!0});var d=c(1);const e=document.querySelector('.container'),f=(a)=>a.changedTouches[0],g=(a,b)=>{for(let c in b)b.hasOwnProperty(c)&&a.style[c]!==b[c]&&(a.style[c]=b[c])},h=(a,b)=>`translate(${a}px, ${b}px)`;new class{constructor(a,b){this.bind(),this.skipScroll=!1,this.container=b,this.bcr=b.getBoundingClientRect(),this.selected=0,this.childCount=b.childElementCount,this.model=new d.a({heights:Array.from(b.children).map((a)=>a.getBoundingClientRect().height),width:b.parentElement.getBoundingClientRect().width}),this.container.addEventListener('touchstart',this.onTouchStart),this.container.addEventListener('touchmove',this.onTouchMove),this.container.addEventListener('touchend',this.onTouchEnd),a.addEventListener('scroll',this.onScroll,!0),this.updateDOM()}bind(){this.onTouchStart=this.onTouchStart.bind(this),this.onTouchMove=this.onTouchMove.bind(this),this.onTouchEnd=this.onTouchEnd.bind(this),this.onScroll=this.onScroll.bind(this)}onScroll(a){!0===this.skipScroll?this.skipScroll=!1:(this.model.onScroll(a.target.scrollTop),this.updateDOM())}onTouchStart(a){this.model.onTouchStart(f(a)),this.updateDOM()}onTouchMove(a){this.model.onTouchMove(f(a)),!1===this.model.isScrolling()&&(a.preventDefault(),this.updateDOM())}onTouchEnd(a){this.model.onTouchEnd(f(a)),this.updateDOM()}updateDOM(){Array.from(this.container.children).forEach((a,b)=>{const{translateX:c,translateY:d,width:e}=this.model.layout[b];g(a,{transform:h(c,d),width:`${e}px`})}),g(this.container,{height:`${this.model.containerHeight}px`,transform:h(this.model.currentX,this.model.currentY)}),document.body.scrollTop!==this.model.scrollY&&(this.skipScroll=!0,document.body.scrollTo(document.body.scrollLeft,this.model.scrollY))}}(window,document.querySelector('.container'))},function(a,b){'use strict';var c=Math.abs;const d=(a,b)=>{const c=[];for(let d=0;d<b;d++)c.push(a(d));return c},e=(c,a)=>Object.assign({},c,a),[f,g,h,i]=[0,1,2,3];b.a=class{constructor({heights:a,width:b}){this.direction=h,this.currentX=0,this.currentY=0,this.scrollY=0,this.selected=0,this.startX=0,this.startY=0,this.width=b,this.count=a.length,this.layout=d((a)=>({translateX:a*b,translateY:0,width:b,scrollY:0}),a.length),this.heights=a,this.containerHeight=a[this.selected]}onScroll(a){this.scrollY=a}onTouchStart({clientX:a,clientY:b}){this.direction=i,this.startX=a,this.startY=b,this.layout=this.layout.map((a,b)=>e(a,{translateY:b===this.selected?a.translateY:this.scrollY-this.layout[b].scrollY,scrollY:b===this.selected?this.scrollY:a.scrollY}))}onTouchMove({clientX:a,clientY:b}){if(this.direction===i){const d=c(a-this.startX),e=c(b-this.startY);this.direction=d>e?f:g}this.direction===f&&(this.currentX=a-this.startX-this.selected*this.width)}onTouchEnd({clientX:a,clientY:b}){if(this.direction===f){const b=this.startX-a;30<c(b)&&(0<b?this.selected=Math.min(this.count-1,this.selected+1):this.selected=Math.max(0,this.selected-1)),this.currentX=-this.selected*this.width,this.containerHeight=this.heights[this.selected],this.layout=this.layout.map((a,b)=>e(a,{translateY:b===this.selected?0:-a.scrollY})),this.scrollY=this.layout[this.selected].scrollY}this.direction=h}isScrolling(){return this.direction===g}isMoving(){return this.direction!==h}}}]);
+/******/ (function(modules) { // webpackBootstrap
+/******/ 	// The module cache
+/******/ 	var installedModules = {};
+/******/
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/
+/******/ 		// Check if module is in cache
+/******/ 		if(installedModules[moduleId]) {
+/******/ 			return installedModules[moduleId].exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = installedModules[moduleId] = {
+/******/ 			i: moduleId,
+/******/ 			l: false,
+/******/ 			exports: {}
+/******/ 		};
+/******/
+/******/ 		// Execute the module function
+/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/
+/******/ 		// Flag the module as loaded
+/******/ 		module.l = true;
+/******/
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/
+/******/
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = modules;
+/******/
+/******/ 	// expose the module cache
+/******/ 	__webpack_require__.c = installedModules;
+/******/
+/******/ 	// define getter function for harmony exports
+/******/ 	__webpack_require__.d = function(exports, name, getter) {
+/******/ 		if(!__webpack_require__.o(exports, name)) {
+/******/ 			Object.defineProperty(exports, name, {
+/******/ 				configurable: false,
+/******/ 				enumerable: true,
+/******/ 				get: getter
+/******/ 			});
+/******/ 		}
+/******/ 	};
+/******/
+/******/ 	// getDefaultExport function for compatibility with non-harmony modules
+/******/ 	__webpack_require__.n = function(module) {
+/******/ 		var getter = module && module.__esModule ?
+/******/ 			function getDefault() { return module['default']; } :
+/******/ 			function getModuleExports() { return module; };
+/******/ 		__webpack_require__.d(getter, 'a', getter);
+/******/ 		return getter;
+/******/ 	};
+/******/
+/******/ 	// Object.prototype.hasOwnProperty.call
+/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
+/******/
+/******/ 	// __webpack_public_path__
+/******/ 	__webpack_require__.p = "";
+/******/
+/******/ 	// Load entry module and return exports
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
+/******/ })
+/************************************************************************/
+/******/ ([
+/* 0 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__CarouselModel__ = __webpack_require__(1);
+
+const Container = document.querySelector('.container')
+
+const getTouch = i => i.changedTouches[0]
+const setStyle = (el, value) => {
+  for (let i in value) {
+    if (value.hasOwnProperty(i) && el.style[i] !== value[i]) {
+      el.style[i] = value[i]
+    }
+  }
+}
+const translateXY = (x, y) => `translate(${x}px, ${y}px)`
+
+class Carousel {
+  constructor(win, container) {
+    this.bind()
+    this.skipScroll = false
+    this.container = container
+    this.bcr = container.getBoundingClientRect()
+    this.selected = 0
+    this.childCount = container.childElementCount
+    this.model = new __WEBPACK_IMPORTED_MODULE_0__CarouselModel__["a" /* CarouselModel */]({
+      heights: Array.from(container.children).map(
+        i => i.getBoundingClientRect().height
+      ),
+      width: container.parentElement.getBoundingClientRect().width
+    })
+    this.container.addEventListener('touchstart', this.onTouchStart)
+    this.container.addEventListener('touchmove', this.onTouchMove)
+    this.container.addEventListener('touchend', this.onTouchEnd)
+    win.addEventListener('scroll', this.onScroll, true)
+    this.updateDOM()
+  }
+
+  bind() {
+    this.onTouchStart = this.onTouchStart.bind(this)
+    this.onTouchMove = this.onTouchMove.bind(this)
+    this.onTouchEnd = this.onTouchEnd.bind(this)
+    this.onScroll = this.onScroll.bind(this)
+  }
+
+  onScroll(ev) {
+    if (this.skipScroll === true) {
+      this.skipScroll = false
+    } else {
+      this.model.onScroll(ev.target.scrollTop)
+      this.updateDOM()
+    }
+  }
+
+  onTouchStart(ev) {
+    this.model.onTouchStart(getTouch(ev))
+    this.updateDOM()
+  }
+
+  onTouchMove(ev) {
+    this.model.onTouchMove(getTouch(ev))
+    if (this.model.isScrolling() === false) {
+      ev.preventDefault()
+      this.updateDOM()
+    }
+  }
+
+  onTouchEnd(ev) {
+    this.model.onTouchEnd(getTouch(ev))
+    this.updateDOM()
+  }
+
+  updateDOM() {
+    Array.from(this.container.children).forEach((el, i) => {
+      const { translateX, translateY, width } = this.model.layout[i]
+      setStyle(el, {
+        transform: translateXY(translateX, translateY),
+        width: `${width}px`
+      })
+    })
+
+    setStyle(this.container, {
+      transition: this.model.isMoving() ?  '': 'ease-out 300ms',
+      height: `${this.model.containerHeight}px`,
+      transform: translateXY(this.model.currentX, this.model.currentY)
+    })
+
+    if (document.body.scrollTop !== this.model.scrollY) {
+      this.skipScroll = true
+      document.body.scrollTo(document.body.scrollLeft, this.model.scrollY)
+    }
+  }
+}
+
+new Carousel(window, document.querySelector('.container'))
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+const times = (fn, count) => {
+  const results = []
+  for (let i = 0; i < count; i++) {
+    results.push(fn(i))
+  }
+  return results
+}
+
+const merge = (a, b) => {
+  return Object.assign({}, a, b)
+}
+
+const [HORIZONTAL, VERTICAL, NONE, UNKNOWN] = [0, 1, 2, 3]
+
+class CarouselModel {
+  constructor({ heights, width }) {
+    this.direction = NONE
+    this.currentX = 0
+    this.currentY = 0
+    this.scrollY = 0
+    this.selected = 0
+    this.startX = 0
+    this.startY = 0
+    this.width = width
+    this.count = heights.length
+    this.layout = times(
+      i => ({
+        translateX: i * width,
+        translateY: 0,
+        width: width,
+        scrollY: 0
+      }),
+      heights.length
+    )
+    this.heights = heights
+    this.containerHeight = heights[this.selected]
+  }
+  onScroll(scrollY) {
+    this.scrollY = scrollY
+  }
+  onTouchStart({ clientX, clientY }) {
+    this.direction = UNKNOWN
+    this.startX = clientX
+    this.startY = clientY
+    this.layout = this.layout.map((pos, i) =>
+      merge(pos, {
+        translateY:
+          i === this.selected
+            ? pos.translateY
+            : this.scrollY - this.layout[i].scrollY,
+        scrollY: i === this.selected ? this.scrollY : pos.scrollY
+      })
+    )
+  }
+  onTouchMove({ clientX, clientY }) {
+    if (this.direction === UNKNOWN) {
+      const deltaX = Math.abs(clientX - this.startX)
+      const deltaY = Math.abs(clientY - this.startY)
+      this.direction = deltaX > deltaY ? HORIZONTAL : VERTICAL
+    }
+    if (this.direction === HORIZONTAL) {
+      this.currentX = clientX - this.startX - this.selected * this.width
+    }
+  }
+  onTouchEnd({ clientX, clientY }) {
+    if (this.direction === HORIZONTAL) {
+      const delta = this.startX - clientX
+      if (Math.abs(delta) > 30) {
+        if (delta > 0) {
+          this.selected = Math.min(this.count - 1, this.selected + 1)
+        } else {
+          this.selected = Math.max(0, this.selected - 1)
+        }
+      }
+      this.currentX = -this.selected * this.width
+      this.containerHeight = this.heights[this.selected]
+      this.layout = this.layout.map((pos, i) =>
+        merge(pos, {
+          translateY: i === this.selected ? 0 : -pos.scrollY
+        })
+      )
+      this.scrollY = this.layout[this.selected].scrollY
+    }
+    this.direction = NONE
+  }
+
+  isScrolling() {
+    return this.direction === VERTICAL
+  }
+  isMoving() {
+    return this.direction !== NONE
+  }
+}
+/* harmony export (immutable) */ __webpack_exports__["a"] = CarouselModel;
+
+
+
+/***/ })
+/******/ ]);

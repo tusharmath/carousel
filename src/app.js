@@ -65,6 +65,7 @@ class Carousel {
     this.model.onTouchEnd(getTouch(ev))
     this.updateDOM()
   }
+
   updateDOM() {
     Array.from(this.container.children).forEach((el, i) => {
       const { translateX, translateY, width } = this.model.layout[i]
@@ -75,6 +76,7 @@ class Carousel {
     })
 
     setStyle(this.container, {
+      transition: this.model.isMoving() ?  '': 'ease-out 300ms',
       height: `${this.model.containerHeight}px`,
       transform: translateXY(this.model.currentX, this.model.currentY)
     })
