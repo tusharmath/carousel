@@ -55,10 +55,10 @@ class Carousel {
 
   onTouchMove(ev) {
     this.model.onTouchMove(getTouch(ev))
-    if (this.model.isScroll === false) {
+    if (this.model.isScrolling() === false) {
       ev.preventDefault()
+      this.updateDOM()
     }
-    this.updateDOM()
   }
 
   onTouchEnd(ev) {

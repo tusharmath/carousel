@@ -10,9 +10,11 @@ const merge = (a, b) => {
   return Object.assign({}, a, b)
 }
 
+const [HORIZONTAL, VERTICAL, NONE, UNKNOWN] = [0, 1, 2, 3]
+
 export class CarouselModel {
   constructor({ heights, width }) {
-    this.isMoving = false
+    this.direction = NONE
     this.currentX = 0
     this.currentY = 0
     this.scrollY = 0
@@ -32,13 +34,12 @@ export class CarouselModel {
     )
     this.heights = heights
     this.containerHeight = heights[this.selected]
-    this.isScroll = null
   }
   onScroll(scrollY) {
     this.scrollY = scrollY
   }
   onTouchStart({ clientX, clientY }) {
-    this.isMoving = true
+    this.direction = UNKNOWN
     this.startX = clientX
     this.startY = clientY
     this.layout = this.layout.map((pos, i) =>
@@ -52,31 +53,41 @@ export class CarouselModel {
     )
   }
   onTouchMove({ clientX, clientY }) {
-    if (this.isScroll === null) {
+    if (this.direction === UNKNOWN) {
       const deltaX = Math.abs(clientX - this.startX)
       const deltaY = Math.abs(clientY - this.startY)
-      this.isScroll = deltaY > deltaX
+      this.direction = deltaX > deltaY ? HORIZONTAL : VERTICAL
     }
-    this.currentX = clientX - this.startX - this.selected * this.width
+    if (this.direction === HORIZONTAL) {
+      this.currentX = clientX - this.startX - this.selected * this.width
+    }
   }
   onTouchEnd({ clientX, clientY }) {
-    this.isMoving = false
-    this.isScroll = null
-    const delta = this.startX - clientX
-    if (Math.abs(delta) > 30) {
-      if (delta > 0) {
-        this.selected = Math.min(this.count - 1, this.selected + 1)
-      } else {
-        this.selected = Math.max(0, this.selected - 1)
+    if (this.direction === HORIZONTAL) {
+      const delta = this.startX - clientX
+      if (Math.abs(delta) > 30) {
+        if (delta > 0) {
+          this.selected = Math.min(this.count - 1, this.selected + 1)
+        } else {
+          this.selected = Math.max(0, this.selected - 1)
+        }
       }
+      this.currentX = -this.selected * this.width
+      this.containerHeight = this.heights[this.selected]
+      this.layout = this.layout.map((pos, i) =>
+        merge(pos, {
+          translateY: i === this.selected ? 0 : -pos.scrollY
+        })
+      )
+      this.scrollY = this.layout[this.selected].scrollY
     }
-    this.currentX = -this.selected * this.width
-    this.containerHeight = this.heights[this.selected]
-    this.layout = this.layout.map((pos, i) =>
-      merge(pos, {
-        translateY: i === this.selected ? 0 : -pos.scrollY
-      })
-    )
-    this.scrollY = this.layout[this.selected].scrollY
+    this.direction = NONE
+  }
+
+  isScrolling() {
+    return this.direction === VERTICAL
+  }
+  isMoving() {
+    return this.direction !== NONE
   }
 }
