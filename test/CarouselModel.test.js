@@ -15,31 +15,31 @@ suite('CarouselModel', () => {
 
   test('onTouchStart', () => {
     const c = new CarouselModel({ heights: [100, 200], width: 100 })
-    c.onTouchStart(50)
-    c.onTouchMove(30)
+    c.onTouchStart({ clientX: 50 })
+    c.onTouchMove({clientX: 30})
 
     assert.equal(c.currentX, -20)
   })
 
   test('onTouchMove -> currentX updates', () => {
     const c = new CarouselModel({ heights: [100, 200], width: 100 })
-    c.onTouchStart(50)
-    c.onTouchEnd(10)
+    c.onTouchStart({ clientX: 50 })
+    c.onTouchEnd({clientX: 10})
     assert.equal(c.selected, 1)
     assert.equal(c.currentX, -100)
 
-    c.onTouchStart(50)
-    c.onTouchMove(40)
+    c.onTouchStart({ clientX: 50 })
+    c.onTouchMove({clientX: 40})
     assert.equal(c.currentX, -110)
-    c.onTouchMove(30)
+    c.onTouchMove({clientX: 30})
     assert.equal(c.currentX, -120)
   })
 
   test('onTouchEnd -> selected remains unchanged', () => {
     const c = new CarouselModel({ heights: [100, 200], width: 100 })
-    c.onTouchStart(50)
-    c.onTouchMove(30)
-    c.onTouchEnd(30)
+    c.onTouchStart({ clientX: 50 })
+    c.onTouchMove({clientX: 30})
+    c.onTouchEnd({clientX: 30})
 
     assert.equal(c.selected, 0)
     assert.equal(c.currentX, 0)
@@ -48,9 +48,9 @@ suite('CarouselModel', () => {
 
   test('onTouchEnd -> selected increases', () => {
     const c = new CarouselModel({ heights: [100, 200], width: 100 })
-    c.onTouchStart(50)
-    c.onTouchMove(10)
-    c.onTouchEnd(10)
+    c.onTouchStart({ clientX: 50 })
+    c.onTouchMove({clientX: 10})
+    c.onTouchEnd({clientX: 10})
 
     assert.equal(c.selected, 1)
     assert.equal(c.currentX, -100)
@@ -59,10 +59,10 @@ suite('CarouselModel', () => {
 
   test('onTouchEnd -> selected remains unchanged at right most', () => {
     const c = new CarouselModel({ heights: [100, 200], width: 100 })
-    c.onTouchStart(50)
-    c.onTouchEnd(10)
-    c.onTouchStart(50)
-    c.onTouchEnd(10)
+    c.onTouchStart({ clientX: 50 })
+    c.onTouchEnd({clientX: 10})
+    c.onTouchStart({ clientX: 50 })
+    c.onTouchEnd({clientX: 10})
 
     assert.equal(c.selected, 1)
     assert.equal(c.currentX, -100)
@@ -71,8 +71,8 @@ suite('CarouselModel', () => {
 
   test('onTouchEnd -> selected remains unchanged at left most', () => {
     const c = new CarouselModel({ heights: [100, 200], width: 100 })
-    c.onTouchStart(50)
-    c.onTouchEnd(90)
+    c.onTouchStart({ clientX: 50 })
+    c.onTouchEnd({clientX: 90})
     assert.equal(c.selected, 0)
     assert.equal(c.currentX, 0)
     assert.equal(c.containerHeight, 100)
@@ -89,7 +89,7 @@ suite('CarouselModel', () => {
     c.onScroll(10)
     c.onScroll(11)
     c.onScroll(12)
-    c.onTouchStart(0)
+    c.onTouchStart({ clientX: 0 })
 
     assert.deepEqual(c.layout, [
       { translateX: 0, translateY: 0, width: 100, scrollY: 12 },
@@ -102,15 +102,15 @@ suite('CarouselModel', () => {
     const c = new CarouselModel({ heights: [50, 100, 10], width: 100 })
     c.onScroll(5)
 
-    c.onTouchStart(50)
+    c.onTouchStart({ clientX: 50 })
     assert.deepEqual(c.layout, [
       { translateX: 0, translateY: 0, width: 100, scrollY: 5 },
       { translateX: 100, translateY: 5, width: 100, scrollY: 0 },
       { translateX: 200, translateY: 5, width: 100, scrollY: 0 }
     ])
 
-    c.onTouchMove(10)
-    c.onTouchEnd(10)
+    c.onTouchMove({clientX: 10})
+    c.onTouchEnd({clientX: 10})
 
     assert.equal(c.containerHeight, 100)
     assert.equal(c.scrollY, 0)
@@ -120,9 +120,8 @@ suite('CarouselModel', () => {
       { translateX: 200, translateY: 0, width: 100, scrollY: 0 }
     ])
 
-
     c.onScroll(7)
-    c.onTouchStart(50)
+    c.onTouchStart({ clientX: 50 })
 
     assert.deepEqual(c.layout, [
       { translateX: 0, translateY: 2, width: 100, scrollY: 5 },
@@ -130,8 +129,8 @@ suite('CarouselModel', () => {
       { translateX: 200, translateY: 7, width: 100, scrollY: 0 }
     ])
 
-    c.onTouchMove(90)
-    c.onTouchEnd(90)
+    c.onTouchMove({clientX: 90})
+    c.onTouchEnd({clientX: 90})
 
     assert.equal(c.containerHeight, 50)
     assert.equal(c.scrollY, 5)
@@ -145,10 +144,21 @@ suite('CarouselModel', () => {
   test('isMoving', () => {
     const c = new CarouselModel({ heights: [50, 100, 10], width: 100 })
     assert.ok(!c.isMoving)
-    c.onTouchStart(0)
+    c.onTouchStart({ clientX: 0 })
     assert.ok(c.isMoving)
 
-    c.onTouchEnd(0)
+    c.onTouchEnd({clientX: 0})
     assert.ok(!c.isMoving)
+  })
+
+  test('isScroll', () => {
+    const c = new CarouselModel({ heights: [50, 100, 10], width: 100 })
+    c.onTouchStart({ clientX: 10, clientY: 10 })
+    c.onTouchMove({clientX: 10, clientY: 15})
+    assert.ok(c.isScroll === true)
+    c.onTouchMove({clientX: 20, clientY: 15})
+    assert.ok(c.isScroll === true)
+    c.onTouchEnd({clientX: 20, clientY: 15})
+    assert.ok(c.isScroll === null)
   })
 })

@@ -1,8 +1,7 @@
 import { CarouselModel } from './CarouselModel'
 const Container = document.querySelector('.container')
 
-const getX = (i) => i.changedTouches[0].clientX
-const getY = (i) => i.changedTouches[0].clientY
+const getTouch = i => i.changedTouches[0]
 const setStyle = (el, value) => {
   for (let i in value) {
     if (value.hasOwnProperty(i) && el.style[i] !== value[i]) {
@@ -26,15 +25,9 @@ class Carousel {
       ),
       width: container.parentElement.getBoundingClientRect().width
     })
-    this.container.addEventListener('touchstart', this.onTouchStart, {
-      passive: true
-    })
-    this.container.addEventListener('touchmove', this.onTouchMove, {
-      passive: true
-    })
-    this.container.addEventListener('touchend', this.onTouchEnd, {
-      passive: true
-    })
+    this.container.addEventListener('touchstart', this.onTouchStart)
+    this.container.addEventListener('touchmove', this.onTouchMove)
+    this.container.addEventListener('touchend', this.onTouchEnd)
     win.addEventListener('scroll', this.onScroll, true)
     this.updateDOM()
   }
@@ -56,17 +49,20 @@ class Carousel {
   }
 
   onTouchStart(ev) {
-    this.model.onTouchStart(getX(ev))
+    this.model.onTouchStart(getTouch(ev))
     this.updateDOM()
   }
 
   onTouchMove(ev) {
-    this.model.onTouchMove(getX(ev))
+    this.model.onTouchMove(getTouch(ev))
+    if (this.model.isScroll === false) {
+      ev.preventDefault()
+    }
     this.updateDOM()
   }
 
   onTouchEnd(ev) {
-    this.model.onTouchEnd(getX(ev))
+    this.model.onTouchEnd(getTouch(ev))
     this.updateDOM()
   }
   updateDOM() {

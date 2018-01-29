@@ -1,6 +1,6 @@
 const times = (fn, count) => {
   const results = []
-  for(let i = 0; i < count; i++) {
+  for (let i = 0; i < count; i++) {
     results.push(fn(i))
   }
   return results
@@ -32,23 +32,36 @@ export class CarouselModel {
     )
     this.heights = heights
     this.containerHeight = heights[this.selected]
+    this.isScroll = null
   }
   onScroll(scrollY) {
     this.scrollY = scrollY
   }
-  onTouchStart(clientX) {
+  onTouchStart({ clientX, clientY }) {
     this.isMoving = true
     this.startX = clientX
-    this.layout = this.layout.map((pos, i) => merge(pos, {
-      translateY: i === this.selected ? pos.translateY : this.scrollY - this.layout[i].scrollY,
-      scrollY: i === this.selected ? this.scrollY : pos.scrollY
-    }))
+    this.startY = clientY
+    this.layout = this.layout.map((pos, i) =>
+      merge(pos, {
+        translateY:
+          i === this.selected
+            ? pos.translateY
+            : this.scrollY - this.layout[i].scrollY,
+        scrollY: i === this.selected ? this.scrollY : pos.scrollY
+      })
+    )
   }
-  onTouchMove(clientX) {
+  onTouchMove({ clientX, clientY }) {
+    if (this.isScroll === null) {
+      const deltaX = Math.abs(clientX - this.startX)
+      const deltaY = Math.abs(clientY - this.startY)
+      this.isScroll = deltaY > deltaX
+    }
     this.currentX = clientX - this.startX - this.selected * this.width
   }
-  onTouchEnd(clientX) {
+  onTouchEnd({ clientX, clientY }) {
     this.isMoving = false
+    this.isScroll = null
     const delta = this.startX - clientX
     if (Math.abs(delta) > 30) {
       if (delta > 0) {
@@ -59,9 +72,11 @@ export class CarouselModel {
     }
     this.currentX = -this.selected * this.width
     this.containerHeight = this.heights[this.selected]
-    this.layout = this.layout.map((pos, i) => merge(pos, {
-      translateY: i === this.selected ? 0 : -pos.scrollY
-    }))
+    this.layout = this.layout.map((pos, i) =>
+      merge(pos, {
+        translateY: i === this.selected ? 0 : -pos.scrollY
+      })
+    )
     this.scrollY = this.layout[this.selected].scrollY
   }
 }
