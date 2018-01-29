@@ -7,11 +7,13 @@
   },
   "scripts": {
     "test": "mocha --require=babel-register --ui=tdd",
-    "start": "webpack-dev-server -d --entry=./src/app.js"
+    "start": "webpack-dev-server -d --entry=./src/app.js",
+    "build": "webpack"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "babel-minify-webpack-plugin": "^0.2.0",
     "mocha": "^5.0.0",
     "webpack": "^3.10.0",
     "webpack-dev-server": "^2.11.1"
