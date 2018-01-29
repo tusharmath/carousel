@@ -1,9 +1,8 @@
 import { CarouselModel } from './CarouselModel'
-import * as R from 'ramda'
 const Container = document.querySelector('.container')
 
-const getX = R.compose(R.prop('clientX'), R.head, R.prop('changedTouches'))
-const getY = R.compose(R.prop('clientY'), R.head, R.prop('changedTouches'))
+const getX = (i) => i.changedTouches[0].clientX
+const getY = (i) => i.changedTouches[0].clientY
 const setStyle = (el, value) => {
   for (let i in value) {
     if (value.hasOwnProperty(i) && el.style[i] !== value[i]) {

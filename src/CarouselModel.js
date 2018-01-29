@@ -1,4 +1,14 @@
-import * as R from 'ramda'
+const times = (fn, count) => {
+  const results = []
+  for(let i = 0; i < count; i++) {
+    results.push(fn(i))
+  }
+  return results
+}
+
+const merge = (a, b) => {
+  return Object.assign({}, a, b)
+}
 
 export class CarouselModel {
   constructor({ heights, width }) {
@@ -11,7 +21,7 @@ export class CarouselModel {
     this.startY = 0
     this.width = width
     this.count = heights.length
-    this.layout = R.times(
+    this.layout = times(
       i => ({
         translateX: i * width,
         translateY: 0,
@@ -29,7 +39,7 @@ export class CarouselModel {
   onTouchStart(clientX) {
     this.isMoving = true
     this.startX = clientX
-    this.layout = this.layout.map((pos, i) => R.merge(pos, {
+    this.layout = this.layout.map((pos, i) => merge(pos, {
       translateY: i === this.selected ? pos.translateY : this.scrollY - this.layout[i].scrollY,
       scrollY: i === this.selected ? this.scrollY : pos.scrollY
     }))
@@ -49,7 +59,7 @@ export class CarouselModel {
     }
     this.currentX = -this.selected * this.width
     this.containerHeight = this.heights[this.selected]
-    this.layout = this.layout.map((pos, i) => R.merge(pos, {
+    this.layout = this.layout.map((pos, i) => merge(pos, {
       translateY: i === this.selected ? 0 : -pos.scrollY
     }))
     this.scrollY = this.layout[this.selected].scrollY
