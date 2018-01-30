@@ -1,5 +1,3 @@
-const MinifyPlugin = require("babel-minify-webpack-plugin")
-
 module.exports = {
   entry: './src/app.js',
   devtool: 'inline',
@@ -7,6 +5,5 @@ module.exports = {
     filename: 'bundle.js'
   },
   plugins: [
-    new MinifyPlugin()
   ]
 }

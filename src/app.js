@@ -1,5 +1,4 @@
 import { CarouselModel } from './CarouselModel'
-const Container = document.querySelector('.container')
 
 const getTouch = i => i.changedTouches[0]
 const setStyle = (el, value) => {
@@ -16,9 +15,7 @@ class Carousel {
     this.bind()
     this.skipScroll = false
     this.container = container
-    this.bcr = container.getBoundingClientRect()
     this.selected = 0
-    this.childCount = container.childElementCount
     this.model = new CarouselModel({
       heights: Array.from(container.children).map(
         i => i.getBoundingClientRect().height
@@ -39,11 +36,11 @@ class Carousel {
     this.onScroll = this.onScroll.bind(this)
   }
 
-  onScroll(ev) {
+  onScroll() {
     if (this.skipScroll === true) {
       this.skipScroll = false
     } else {
-      this.model.onScroll(ev.target.scrollTop)
+      this.model.onScroll(document.body.scrollTop)
       this.updateDOM()
     }
   }
@@ -82,6 +79,7 @@ class Carousel {
     })
 
     if (document.body.scrollTop !== this.model.scrollY) {
+      console.log('scroll', document.body.scrollTop, this.model.scrollY)
       this.skipScroll = true
       document.body.scrollTo(document.body.scrollLeft, this.model.scrollY)
     }
